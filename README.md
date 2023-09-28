@@ -6,7 +6,7 @@
 
 <h3>Получение значений датчиков</h3>
 <font color=green><b>GET</font></b>  <code>api/states/sensors</code>
-
+<br>
 <code>
 {                       <br>
 "temperature":26.6,     <br>
