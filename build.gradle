@@ -22,6 +22,10 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -34,8 +38,12 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-ui:${openApiVersion}"
     implementation "org.springdoc:springdoc-openapi-kotlin:${openApiVersion}"
 
+    implementation group: 'com.profesorfalken', name: 'jSensors', version: '2.2.1'
+
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
 
 tasks.withType(KotlinCompile) {
     kotlinOptions {
