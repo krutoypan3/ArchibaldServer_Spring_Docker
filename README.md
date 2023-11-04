@@ -1,18 +1,21 @@
-<b>Примечание:</b> запускать сервер нужно с правами администратора
+<b>Примечание:</b> запускать сервер нужно
 на хост машине вне каких-либо виртуальных машин (Docker),
 иначе показания с датчиков снять не получится
 
 <h1>Описание api сервера</h1>
 
 <h3>Получение значений датчиков</h3>
-<font color=green><b>GET</font></b>  <code>api/states/sensors</code>
+<font color=green><b>GET</font></b>  <code>http://127.0.0.1:8987/api/states/sensors </code>
 <br>
 <code>
 {                       <br>
-"temperature":26.6,     <br>
 "loadCpu": 1.627094,    <br>
 "loadMemory": 78.12999  <br>
 }
 </code>
 
 
+<h2>Инструкция по сборке jar файла сервера:</h2>
+1) Зайти в Gradle tasks
+2) Выбрать Tasks -> build -> build
+3) В папке build/libs/ будет сгенерированный файл с сервером

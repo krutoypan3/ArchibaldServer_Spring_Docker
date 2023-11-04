@@ -1,8 +1,6 @@
 package ru.oganesyan.artem.archibaldserver
 
-import com.profesorfalken.jsensors.JSensors
-import com.profesorfalken.jsensors.model.components.Components
-import com.profesorfalken.jsensors.model.components.Cpu
+import com.sun.management.OperatingSystemMXBean
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -14,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import ru.oganesyan.artem.archibaldserver.model.CpuInfoResponse
+import java.lang.management.ManagementFactory
+import kotlin.math.roundToInt
 
 
 @Tag(name = "server_controller")
@@ -39,22 +39,12 @@ class ServerController {
     )
     @GetMapping("/api/states/sensors", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getCpuTemp(): CpuInfoResponse {
-
-        val components: Components = JSensors.get.components()
-
-        val cpu: Cpu = components.cpus.first()
-            if (cpu.sensors != null) {
-                val temperatureCpu = cpu.sensors.temperatures.last().value
-
-                val loadSensors = cpu.sensors.loads.takeLast(2)
-                val loadCpu = loadSensors.first().value
-                val loadMemory = loadSensors.last().value
-                return CpuInfoResponse(
-                    temperatureCpu = temperatureCpu,
-                    loadCpu = loadCpu,
-                    loadMemory = loadMemory
-                )
-            }
-        return CpuInfoResponse()
+        val osBean: OperatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean::class.java)
+        val loadMemory = (osBean.totalMemorySize - osBean.freeMemorySize).toDouble()
+        val loadMemoryPercent = (loadMemory / osBean.totalMemorySize) * 100
+        return CpuInfoResponse(
+            loadCpu = (osBean.cpuLoad * 100 * 100).roundToInt() / 100.0,
+            loadMemory = (loadMemoryPercent * 100).roundToInt() / 100.0,
+        )
     }
 }
